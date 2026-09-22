@@ -1,0 +1,8 @@
+{
+  "name": "Voyager AI Travel Planner App",
+  "description": "Premium AI-powered travel management system with intelligent itinerary planning, Supabase PostgreSQL persistence, budgeting, interactive maps, and travel discovery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
