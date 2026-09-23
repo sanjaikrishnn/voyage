@@ -32,6 +32,8 @@ interface NavbarProps {
   onOpenSearch: () => void;
   onOpenAuth: () => void;
   onOpenAssistant?: () => void;
+  onOpenMenu?: () => void;
+  isMenuOpen?: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -39,7 +41,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   onNavigate,
   onOpenSearch,
   onOpenAuth,
-  onOpenAssistant
+  onOpenAssistant,
+  onOpenMenu,
+  isMenuOpen
 }) => {
   const { trips, activeTrip, setActiveTripId } = useTrip();
   const { theme, actualTheme, setTheme } = useTheme();
@@ -301,11 +305,17 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Mobile Hamburger Toggle */}
             <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg text-gray-600 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-zinc-800"
+              onClick={() => {
+                if (onOpenMenu) {
+                  onOpenMenu();
+                } else {
+                  setMobileMenuOpen(!mobileMenuOpen);
+                }
+              }}
+              className="lg:hidden p-2 rounded-lg text-gray-600 dark:text-zinc-300 hover:bg-gray-100 dark:hover:bg-zinc-800 cursor-pointer"
               aria-label="Toggle Menu"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {isMenuOpen || mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>

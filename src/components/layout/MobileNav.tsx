@@ -1,18 +1,22 @@
 import React from 'react';
-import { Home, Compass, MapPin, Map, Bot, MoreHorizontal } from 'lucide-react';
+import { Home, Compass, MapPin, Map, Bot, Menu } from 'lucide-react';
 
 interface MobileNavProps {
   currentPage: string;
   onNavigate: (page: string) => void;
   onToggleAssistant: () => void;
   isAssistantOpen: boolean;
+  onOpenMenu?: () => void;
+  isMenuOpen?: boolean;
 }
 
 export const MobileNav: React.FC<MobileNavProps> = ({
   currentPage,
   onNavigate,
   onToggleAssistant,
-  isAssistantOpen
+  isAssistantOpen,
+  onOpenMenu,
+  isMenuOpen = false
 }) => {
   const tabs = [
     { id: 'home', label: 'Home', icon: Home },
@@ -61,17 +65,23 @@ export const MobileNav: React.FC<MobileNavProps> = ({
         <span className="text-[10px] tracking-tight">AI Guide</span>
       </button>
 
-      {/* More / Dashboard */}
+      {/* Full Menu Trigger */}
       <button
-        onClick={() => onNavigate('dashboard')}
+        onClick={() => {
+          if (onOpenMenu) {
+            onOpenMenu();
+          } else {
+            onNavigate('dashboard');
+          }
+        }}
         className={`flex flex-col items-center justify-center min-h-[48px] min-w-[50px] px-2 py-1 rounded-xl transition-all active:scale-95 cursor-pointer ${
-          currentPage === 'dashboard'
+          isMenuOpen
             ? 'text-teal-600 dark:text-teal-400 font-bold bg-teal-50/70 dark:bg-teal-950/40'
-            : 'text-gray-500 dark:text-zinc-400'
+            : 'text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
         }`}
       >
-        <MoreHorizontal className="w-5 h-5 mb-0.5" />
-        <span className="text-[10px] tracking-tight">More</span>
+        <Menu className="w-5 h-5 mb-0.5" />
+        <span className="text-[10px] tracking-tight">Menu</span>
       </button>
     </nav>
   );

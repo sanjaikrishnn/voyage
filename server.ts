@@ -18,7 +18,7 @@ import {
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
 app.use(express.json({ limit: '10mb' }));
 
@@ -643,7 +643,24 @@ Return raw JSON for a single Activity object:
 
 // Start server with Vite middleware in dev or static files in prod
 async function startServer() {
-  if (process.env.NODE_ENV !== 'production') {
+  // Explicitly serve sw.js with Service-Worker-Allowed header and no-cache policy
+  app.get('/sw.js', (req, res, next) => {
+    const swPath = path.join(process.cwd(), 'dist', 'sw.js');
+    if (fs.existsSync(swPath)) {
+      res.setHeader('Content-Type', 'application/javascript');
+      res.setHeader('Service-Worker-Allowed', '/');
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      return res.sendFile(swPath);
+    }
+    next();
+  });
+
+  const isProduction =
+    process.env.NODE_ENV === 'production' ||
+    process.argv.includes('--production') ||
+    (fs.existsSync(path.join(process.cwd(), 'dist', 'index.html')) && process.env.NODE_ENV !== 'development');
+
+  if (!isProduction) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa'

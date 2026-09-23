@@ -11,6 +11,8 @@ import { GlobalSearchModal } from './components/search/GlobalSearchModal';
 import { AuthModal } from './components/auth/AuthModal';
 import { InteractiveTripMap } from './components/map/InteractiveTripMap';
 import { OfflineIndicator } from './components/pwa/OfflineIndicator';
+import { MobileMenuDrawer } from './components/layout/MobileMenuDrawer';
+import { PWAInstallModal } from './components/pwa/PWAInstallModal';
 
 import { HomePage } from './pages/HomePage';
 import { PlannerPage } from './pages/PlannerPage';
@@ -33,6 +35,8 @@ const AppContent: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [isAuthOpen, setIsAuthOpen] = useState<boolean>(false);
   const [isAssistantOpen, setIsAssistantOpen] = useState<boolean>(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const [isInstallModalOpen, setIsInstallModalOpen] = useState<boolean>(false);
 
   // Global keyboard shortcut: Cmd+K / Ctrl+K
   useEffect(() => {
@@ -135,6 +139,8 @@ const AppContent: React.FC = () => {
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenAuth={() => setIsAuthOpen(true)}
         onOpenAssistant={() => setIsAssistantOpen(true)}
+        onOpenMenu={() => setIsMobileMenuOpen(true)}
+        isMenuOpen={isMobileMenuOpen}
       />
 
       {/* Main Page Canvas */}
@@ -149,6 +155,8 @@ const AppContent: React.FC = () => {
         onNavigate={handleNavigate}
         onToggleAssistant={() => setIsAssistantOpen((prev) => !prev)}
         isAssistantOpen={isAssistantOpen}
+        onOpenMenu={() => setIsMobileMenuOpen(true)}
+        isMenuOpen={isMobileMenuOpen}
       />
 
       {/* Floating AI Travel Concierge */}
@@ -167,6 +175,24 @@ const AppContent: React.FC = () => {
 
       {/* Authentication Modal */}
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+
+      {/* Full Mobile Slide-Up Menu Drawer */}
+      <MobileMenuDrawer
+        isOpen={isMobileMenuOpen}
+        onClose={() => setIsMobileMenuOpen(false)}
+        currentPage={currentPage}
+        onNavigate={handleNavigate}
+        onOpenSearch={() => setIsSearchOpen(true)}
+        onOpenAuth={() => setIsAuthOpen(true)}
+        onOpenAssistant={() => setIsAssistantOpen(true)}
+        onOpenInstallModal={() => setIsInstallModalOpen(true)}
+      />
+
+      {/* PWA Download / Install Modal */}
+      <PWAInstallModal
+        isOpen={isInstallModalOpen}
+        onClose={() => setIsInstallModalOpen(false)}
+      />
 
       {/* PWA Offline Connectivity Banner */}
       <OfflineIndicator />
